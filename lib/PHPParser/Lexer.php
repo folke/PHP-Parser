@@ -31,6 +31,10 @@ class PHPParser_Lexer
      */
     public function startLexing($code) {
         $this->resetErrors();
+        // Fix for token_get_all not honoring 
+        if (substr($code, 0, 2) == '<?' && substr($code, 0, 5) != '<?php') {
+            $code = '<?php' . substr($code, 2);
+        }
         $this->tokens = @token_get_all($code);
         $this->handleErrors();
 
